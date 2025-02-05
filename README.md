@@ -72,3 +72,50 @@ def get_previous_month_details():
 details = get_previous_month_details()
 print(details)
 ```
+Here's the modified code that checks if the output file already exists and if the "population" sheet already contains data. If it does, the code will overwrite the existing data instead of appending to it:
+
+```
+import os
+import pandas as pd
+
+Get the current working directory
+current_dir = os.getcwd()
+print(f"Current working directory: {current_dir}")
+
+Define the output file name
+output_file_name = 'combined_data.xlsx'
+
+Get a list of all Excel files in the current directory (excluding the output file)
+excel_files = [
+    os.path.join(current_dir, file_name)
+    for file_name in os.listdir(current_dir)
+    if (file_name.endswith('.xlsx') or file_name.endswith('.xls')) and file_name != output_file_name
+]
+
+Read all Excel files into DataFrames and combine them
+combined_df = pd.concat([pd.read_excel(file) for file in excel_files], ignore_index=True)
+
+Define the output file path
+output_file_path = os.path.join(current_dir, output_file_name)
+
+Check if the output file already exists
+if os.path.exists(output_file_path):
+    # Read the existing Excel file
+    existing_df = pd.read_excel(output_file_path, sheet_name='population')
+    
+    # Check if the existing DataFrame is the same as the new combined DataFrame
+    if existing_df.equals(combined_df):
+        print("No changes detected. Output file remains the same.")
+    else:
+        # Overwrite the existing Excel file with the new combined DataFrame
+        with pd.ExcelWriter(output_file_path, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+            combined_df.to_excel(writer, index=False, sheet_name='population')
+        print(f"Output file updated with new data.")
+else:
+    # Write the combined DataFrame to a new Excel file
+    with pd.ExcelWriter(output_file_path, engine='openpyxl') as writer:
+        combined_df.to_excel(writer, index=False, sheet_name='population')
+    print(f"Output file created with new data.")
+```
+
+This code checks if the output file already exists and if the "population" sheet already contains data. If it does, the code will overwrite the existing data instead of appending to it. If the data is the same, the code will print a message indicating that no changes were detected.
