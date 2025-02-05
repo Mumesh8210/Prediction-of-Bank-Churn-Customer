@@ -20,6 +20,32 @@ Here's the modified code that checks if the output file already exists and if th
 
 Here is a Python code snippet that calculates the required details:
 
+
+Here's the modified Python code to get the first and last working days of the previous month:
+
+```
+from datetime import datetime, timedelta
+import calendar
+
+today = datetime.today()
+first_day_of_current_month = today.replace(day=1)
+last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
+first_day_of_previous_month = last_day_of_previous_month.replace(day=1)
+
+Get the first working day of the previous month
+first_working_day_of_previous_month = first_day_of_previous_month
+while first_working_day_of_previous_month.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+    first_working_day_of_previous_month += timedelta(days=1)
+
+Get the last working day of the previous month
+last_working_day_of_previous_month = last_day_of_previous_month
+while last_working_day_of_previous_month.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+    last_working_day_of_previous_month -= timedelta(days=1)
+
+print("First Working Day of Previous Month:", first_working_day_of_previous_month.strftime('%d%m%Y'))
+print("Last Working Day of Previous Month:", last_working_day_of_previous_month.strftime('%d%m%Y'))
+```
+
 ```
 from datetime import datetime, timedelta
 
