@@ -27,20 +27,20 @@ from openpyxl import Workbook
 from openpyxl.styles import Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-# Assuming you already have two DataFrames: df and new_df
-# Example:
-# df = pd.DataFrame({'Column1': [1, 2, 3], 'Column2': ['A', 'B', 'C']})
-# new_df = pd.DataFrame({'ColumnA': [10, 20, 30], 'ColumnB': ['X', 'Y', 'Z']})
+Assuming you already have two DataFrames: df and new_df
+Example:
+df = pd.DataFrame({'Column1': [1, 2, 3], 'Column2': ['A', 'B', 'C']})
+new_df = pd.DataFrame({'ColumnA': [10, 20, 30], 'ColumnB': ['X', 'Y', 'Z']})
 
-# Create a new Excel workbook
+Create a new Excel workbook
 wb = Workbook()
 
-# Remove the default sheet created by openpyxl
+Remove the default sheet created by openpyxl
 wb.remove(wb.active)
 
-# Function to add a DataFrame to a sheet with autofit and borders
+Function to add a DataFrame to a sheet with autofit and borders
 def add_sheet_with_formatting(wb, sheet_name, dataframe):
-    # Create a new sheet
+    Create a new sheet
     ws = wb.create_sheet(title=sheet_name)
     
     # Write the DataFrame to the sheet
