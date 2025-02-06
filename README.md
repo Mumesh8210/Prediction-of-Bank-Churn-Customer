@@ -22,53 +22,69 @@ Overall, the goal of this project is to develop a machine learning model that ca
 
 
 
-
-
-```
 import pandas as pd
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Border, Side
+from openpyxl.utils.dataframe import dataframe_to_rows
 
-Assuming df and new_df are your DataFrames
-df = pd.DataFrame({'Column1': ['Data1', 'Data2'], 'Column2': ['Data3', 'Data4']})
-new_df = pd.DataFrame({'Column3': ['Data5', 'Data6'], 'Column4': ['Data7', 'Data8']})
+# Assuming you already have two DataFrames: df and new_df
+# Example:
+# df = pd.DataFrame({'Column1': [1, 2, 3], 'Column2': ['A', 'B', 'C']})
+# new_df = pd.DataFrame({'ColumnA': [10, 20, 30], 'ColumnB': ['X', 'Y', 'Z']})
 
-Create an Excel workbook
+# Create a new Excel workbook
 wb = Workbook()
-ws1 = wb.active
-ws1.title = "Randomizer"
-ws2 = wb.create_sheet("Assignments")
 
-Write DataFrames to Excel sheets
-for r in df.columns:
-    ws1.append([r])
-for r in df.values.tolist():
-    ws1.append(r)
+# Remove the default sheet created by openpyxl
+wb.remove(wb.active)
 
-for r in new_df.columns:
-    ws2.append([r])
-for r in new_df.values.tolist():
-    ws2.append(r)
+# Function to add a DataFrame to a sheet with autofit and borders
+def add_sheet_with_formatting(wb, sheet_name, dataframe):
+    # Create a new sheet
+    ws = wb.create_sheet(title=sheet_name)
+    
+    # Write the DataFrame to the sheet
+    for row in dataframe_to_rows(dataframe, index=False, header=True):
+        ws.append(row)
+    
+    # Autofit columns
+    for column in ws.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = (max_length + 2) * 1.2  # Adjust width with some padding
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Autofit rows (set row height to accommodate text)
+    for row in ws.iter_rows():
+        for cell in row:
+            ws.row_dimensions[cell.row].height = 15  # Set a standard row height
+    
+    # Apply borders to all cells with data
+    thin_border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+    
+    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
+        for cell in row:
+            cell.border = thin_border
 
-Auto-fit columns and add borders
-for column_cells in ws1.columns:
-    length = max(len(str(cell.value)) for cell in column_cells)
-    ws1.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
-for row in ws1.rows:
-    for cell in row:
-        cell.alignment = Alignment(horizontal='center')
-        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+# Add df to the first sheet named "randomizer"
+add_sheet_with_formatting(wb, "randomizer", df)
 
-for column_cells in ws2.columns:
-    length = max(len(str(cell.value)) for cell in column_cells)
-    ws2.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
-for row in ws2.rows:
-    for cell in row:
-        cell.alignment = Alignment(horizontal='center')
-        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+# Add new_df to the second sheet named "assignments"
+add_sheet_with_formatting(wb, "assignments", new_df)
 
-Save the workbook
-wb.save("output.xlsx")
-```
+# Save the workbook
+output_file = "Formatted_Data.xlsx"
+wb.save(output_file)
 
+print(f"Excel file '{output_file}' created with two sheets: 'randomizer' and 'assignments'.")
