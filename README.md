@@ -1,5 +1,6 @@
-# Prediction-of-Bank-Churn-Customer
-*This project aims to develop a machine learning model that can predict the likelihood of a bank customer churning or leaving the bank. Customer churn is a critical issue in the banking industry, and being able to predict it can help banks take proactive steps to retain customers and minimize revenue los*
+bu# Prediction-of-Bank-Churn-Customer
+*This project aims to develop a machine learning model that can predict the likelihood of a bank customer churning or leaving the bank. Customer churn is a critical issue in the banking industry, and 
+being able to predict it can help banks take proactive steps to retain customers and minimize revenue los*
 
 
 
@@ -21,7 +22,7 @@ Overall, the goal of this project is to develop a machine learning model that ca
 
 
 
-Here is the revised code:
+
 
 ```
 import pandas as pd
@@ -40,8 +41,13 @@ ws1.title = "Randomizer"
 ws2 = wb.create_sheet("Assignments")
 
 Write DataFrames to Excel sheets
+for r in df.columns:
+    ws1.append([r])
 for r in df.values.tolist():
     ws1.append(r)
+
+for r in new_df.columns:
+    ws2.append([r])
 for r in new_df.values.tolist():
     ws2.append(r)
 
@@ -65,6 +71,4 @@ for row in ws2.rows:
 Save the workbook
 wb.save("output.xlsx")
 ```
-
-This revised code will write the DataFrames to the Excel sheets without setting any header or values.
 
