@@ -24,6 +24,57 @@ Here is a Python code snippet that calculates the required details:
 Here's the modified Python code to get the first and last working days of the previous month:
 
 ```
+Here's the Python code using pandas and openpyxl libraries to save two DataFrames to different sheets in an Excel file:
+
+```
+import pandas as pd
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
+Assuming df and new_df are your DataFrames
+df = pd.DataFrame({'Column1': ['Data1', 'Data2'], 'Column2': ['Data3', 'Data4']})
+new_df = pd.DataFrame({'Column3': ['Data5', 'Data6'], 'Column4': ['Data7', 'Data8']})
+
+Create an Excel workbook
+wb = Workbook()
+ws1 = wb.active
+ws1.title = "Randomizer"
+ws2 = wb.create_sheet("Assignments")
+
+Write DataFrames to Excel sheets
+for r in df.values.tolist():
+    ws1.append(r)
+for r in new_df.values.tolist():
+    ws2.append(r)
+
+Set header row values
+ws1['A1'] = 'Randomizer'
+ws2['A1'] = 'Assignments'
+
+Auto-fit columns and add borders
+for column_cells in ws1.columns:
+    length = max(len(str(cell.value)) for cell in column_cells)
+    ws1.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
+for row in ws1.rows:
+    for cell in row:
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+for column_cells in ws2.columns:
+    length = max(len(str(cell.value)) for cell in column_cells)
+    ws2.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
+for row in ws2.rows:
+    for cell in row:
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+Save the workbook
+wb.save("output.xlsx")
+```
+
+This code creates a new Excel workbook, adds two sheets ("Randomizer" and "Assignments"), wr
+,,,
 from datetime import datetime, timedelta
 import calendar
 
@@ -119,3 +170,54 @@ else:
 ```
 
 This code checks if the output file already exists and if the "population" sheet already contains data. If it does, the code will overwrite the existing data instead of appending to it. If the data is the same, the code will print a message indicating that no changes were detected.
+Here's the Python code using pandas and openpyxl libraries to save two DataFrames to different sheets in an Excel file:
+
+```
+import pandas as pd
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
+Assuming df and new_df are your DataFrames
+df = pd.DataFrame({'Column1': ['Data1', 'Data2'], 'Column2': ['Data3', 'Data4']})
+new_df = pd.DataFrame({'Column3': ['Data5', 'Data6'], 'Column4': ['Data7', 'Data8']})
+
+Create an Excel workbook
+wb = Workbook()
+ws1 = wb.active
+ws1.title = "Randomizer"
+ws2 = wb.create_sheet("Assignments")
+
+Write DataFrames to Excel sheets
+for r in df.values.tolist():
+    ws1.append(r)
+for r in new_df.values.tolist():
+    ws2.append(r)
+
+Set header row values
+ws1['A1'] = 'Randomizer'
+ws2['A1'] = 'Assignments'
+
+Auto-fit columns and add borders
+for column_cells in ws1.columns:
+    length = max(len(str(cell.value)) for cell in column_cells)
+    ws1.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
+for row in ws1.rows:
+    for cell in row:
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+for column_cells in ws2.columns:
+    length = max(len(str(cell.value)) for cell in column_cells)
+    ws2.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
+for row in ws2.rows:
+    for cell in row:
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+Save the workbook
+wb.save("output.xlsx")
+```
+
+This code creates a new Excel workbook, adds two sheets ("Randomizer" and "Assignments"), writes the DataFrames to the respective sheets, auto-fits the columns, centers the text, and adds borders around the cells. Finally, it saves the workbook as "output.xlsx".
+
