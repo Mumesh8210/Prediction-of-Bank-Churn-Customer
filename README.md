@@ -19,72 +19,11 @@ being able to predict it can help banks take proactive steps to retain customers
 Overall, the goal of this project is to develop a machine learning model that can help banks to identify customers who are likely to churn and take appropriate measures to retain them.**
 
 
-
 import pandas as pd
-
-def process_excel(file_path):
-    # Load the Excel file
-    with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace') as writer:
-        df = pd.read_excel(file_path, sheet_name=0)  # Read the first sheet
-        
-        # Filter data where 'Notary Required' is 'Y'
-        filtered_df = df[df['Notary Required'].astype(str).str.strip() == 'Y']
-        
-        # Remove duplicates based on 'ClaimID'
-        filtered_df = filtered_df.drop_duplicates(subset=['ClaimID'])
-        
-        # Write the filtered data to a new sheet named 'sample'
-        filtered_df.to_excel(writer, sheet_name='sample', index=False)
-    
-    print("Filtered data successfully written to 'sample' sheet")
-
-Provide the full file path of your Excel file
-file_path = r'C:\path\to\your\file.xlsx'  # Update this path
-process_excel(file_path)
-
-,,,
-import pandas as pd
+import os
 
 def process_excel():
     # Get the list of Excel files in the current directory
-    import os
-    files = [f for f in os.listdir() if f.endswith('.xlsx')]
-    
-    if not files:
-        print("No Excel files found in the directory.")
-        return
-    
-    file_path = files[0]  # Read the first Excel file found
-    
-    # Load the Excel file
-    with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace') as writer:
-        df = pd.read_excel(file_path, sheet_name=0)  # Read the first sheet
-        
-        # Filter data where 'Notary Required' is 'Y'
-        filtered_df = df[df['Notary Required'].astype(str).str.strip() == 'Y']
-        
-        # Remove duplicates based on 'ClaimID'
-        filtered_df = filtered_df.drop_duplicates(subset=['ClaimID'])
-        
-        # Write the filtered data to a new sheet named 'sample'
-        filtered_df.to_excel(writer, sheet_name='sample', index=False)
-    
-    print(f"Filtered data successfully written to 'sample' sheet in {file_path}")
-
-Process the first available Excel file in the current directory
-process_excel()
-
-
-
-,,,
-
-import pandas as pd
-from openpyxl import load_workbook
-from openpyxl.styles import Alignment, Border, Side
-
-def process_excel():
-    # Get the list of Excel files in the current directory
-    import os
     files = [f for f in os.listdir() if f.endswith('.xlsx')]
     
     if not files:
@@ -106,25 +45,7 @@ def process_excel():
     with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace', engine='openpyxl') as writer:
         filtered_df.to_excel(writer, sheet_name='sample', index=False)
     
-    # Load workbook and sheet
-    wb = load_workbook(file_path)
-    ws = wb['sample']
-    
-    # Define styles for center alignment and borders
-    align = Alignment(horizontal='center', vertical='center')
-    border = Border(left=Side(style='thin'),
-                    right=Side(style='thin'),
-                    top=Side(style='thin'),
-                    bottom=Side(style='thin'))
-    
-    # Apply styles to all cells in the sheet
-    for row in ws.iter_rows():
-        for cell in row:
-            cell.alignment = align
-            cell.border = border
-    
-    wb.save(file_path)
-    print(f"Filtered data successfully written to 'sample' sheet in {file_path} with formatting applied.")
+    print(f"Filtered data successfully written to 'sample' sheet in {file_path}.")
 
 #Process the first available Excel file in the current directory
 process_excel()
