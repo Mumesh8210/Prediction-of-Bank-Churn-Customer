@@ -64,6 +64,18 @@ def process_excel():
         for cell in row:
             cell.alignment = align
             cell.border = border
+    for col in ws.columns:
+        max_length = 0
+        col_letter = col[0].column_letter  # Get the column letter
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        adjusted_width = max_length + 2
+        ws.column_dimensions[col_letter].width = adjusted_width
+    
     
     wb.save(file_path)
     print(f"Updated data successfully written to 'sample' sheet in {file_path} with formatting applied.")
