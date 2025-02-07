@@ -20,71 +20,58 @@ Overall, the goal of this project is to develop a machine learning model that ca
 
 
 
+import pandas as pd
+
+def process_excel(file_path):
+    # Load the Excel file
+    with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace') as writer:
+        df = pd.read_excel(file_path, sheet_name=0)  # Read the first sheet
+        
+        # Filter data where 'Notary Required' is 'Y'
+        filtered_df = df[df['Notary Required'].astype(str).str.strip() == 'Y']
+        
+        # Remove duplicates based on 'ClaimID'
+        filtered_df = filtered_df.drop_duplicates(subset=['ClaimID'])
+        
+        # Write the filtered data to a new sheet named 'sample'
+        filtered_df.to_excel(writer, sheet_name='sample', index=False)
+    
+    print("Filtered data successfully written to 'sample' sheet")
+
+Provide the full file path of your Excel file
+file_path = r'C:\path\to\your\file.xlsx'  # Update this path
+process_excel(file_path)
 
 
 import pandas as pd
-from openpyxl import Workbook
-from openpyxl.styles import Border, Side
-from openpyxl.utils.dataframe import dataframe_to_rows
 
-Assuming you already have two DataFrames: df and new_df
-Example:
-df = pd.DataFrame({'Column1': [1, 2, 3], 'Column2': ['A', 'B', 'C']})
-new_df = pd.DataFrame({'ColumnA': [10, 20, 30], 'ColumnB': ['X', 'Y', 'Z']})
-
-Create a new Excel workbook
-wb = Workbook()
-
-Remove the default sheet created by openpyxl
-wb.remove(wb.active)
-
-Function to add a DataFrame to a sheet with autofit and borders
-def add_sheet_with_formatting(wb, sheet_name, dataframe):
-    Create a new sheet
-    ws = wb.create_sheet(title=sheet_name)
+def process_excel():
+    # Get the list of Excel files in the current directory
+    import os
+    files = [f for f in os.listdir() if f.endswith('.xlsx')]
     
-    # Write the DataFrame to the sheet
-    for row in dataframe_to_rows(dataframe, index=False, header=True):
-        ws.append(row)
+    if not files:
+        print("No Excel files found in the directory.")
+        return
     
-    # Autofit columns
-    for column in ws.columns:
-        max_length = 0
-        column_letter = column[0].column_letter
-        for cell in column:
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(str(cell.value))
-            except:
-                pass
-        adjusted_width = (max_length + 2) * 1.2  # Adjust width with some padding
-        ws.column_dimensions[column_letter].width = adjusted_width
+    file_path = files[0]  # Read the first Excel file found
     
-    # Autofit rows (set row height to accommodate text)
-    for row in ws.iter_rows():
-        for cell in row:
-            ws.row_dimensions[cell.row].height = 15  # Set a standard row height
+    # Load the Excel file
+    with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace') as writer:
+        df = pd.read_excel(file_path, sheet_name=0)  # Read the first sheet
+        
+        # Filter data where 'Notary Required' is 'Y'
+        filtered_df = df[df['Notary Required'].astype(str).str.strip() == 'Y']
+        
+        # Remove duplicates based on 'ClaimID'
+        filtered_df = filtered_df.drop_duplicates(subset=['ClaimID'])
+        
+        # Write the filtered data to a new sheet named 'sample'
+        filtered_df.to_excel(writer, sheet_name='sample', index=False)
     
-    # Apply borders to all cells with data
-    thin_border = Border(
-        left=Side(style='thin'),
-        right=Side(style='thin'),
-        top=Side(style='thin'),
-        bottom=Side(style='thin')
-    )
-    
-    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-        for cell in row:
-            cell.border = thin_border
+    print(f"Filtered data successfully written to 'sample' sheet in {file_path}")
 
-# Add df to the first sheet named "randomizer"
-add_sheet_with_formatting(wb, "randomizer", df)
+Process the first available Excel file in the current directory
+process_excel()
 
-# Add new_df to the second sheet named "assignments"
-add_sheet_with_formatting(wb, "assignments", new_df)
 
-# Save the workbook
-output_file = "Formatted_Data.xlsx"
-wb.save(output_file)
-
-print(f"Excel file '{output_file}' created with two sheets: 'randomizer' and 'assignments'.")
