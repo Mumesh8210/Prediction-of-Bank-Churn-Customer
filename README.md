@@ -18,12 +18,15 @@ being able to predict it can help banks take proactive steps to retain customers
 **Once the model has been trained and evaluated, it can be used to predict whether a new customer is likely to churn or not. This information can be used by the bank to take appropriate measures such as offering special promotions or incentives to retain customers who are at risk of churning.
 Overall, the goal of this project is to develop a machine learning model that can help banks to identify customers who are likely to churn and take appropriate measures to retain them.**
 
-
 import pandas as pd
-import os
-
+import numpy as np
+from datetime import datetime
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment, Border, Side
+#define the function
 def process_excel():
     # Get the list of Excel files in the current directory
+    import os
     files = [f for f in os.listdir() if f.endswith('.xlsx')]
     
     if not files:
@@ -35,18 +38,35 @@ def process_excel():
     # Load the Excel file
     df = pd.read_excel(file_path, sheet_name=0)  # Read the first sheet
     
-    # Filter data where 'Notary Required' is 'Y'
-    filtered_df = df[df['Notary Required'].astype(str).str.strip() == 'Y']
+    # Add new columns at the beginning
+    df.insert(0, 'Random Numbers', np.random.randint(10000, 99999, size=len(df)))
+    df.insert(1, 'Sample', '')  # Empty column for 'Sample'
+    df.insert(2, 'Date Sample Pulled', datetime.today().strftime('%Y-%m-%d'))
+    df.insert(3, 'Date Worked', '')  # Empty column for 'Date Worked'
     
-    # Remove duplicates based on 'ClaimID'
-    filtered_df = filtered_df.drop_duplicates(subset=['ClaimID'])
-    
-    # Write the filtered data to a new sheet named 'sample'
+    # Write the updated data to a new sheet named 'sample'
     with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='replace', engine='openpyxl') as writer:
-        filtered_df.to_excel(writer, sheet_name='sample', index=False)
+        df.to_excel(writer, sheet_name='sample', index=False)
     
-    print(f"Filtered data successfully written to 'sample' sheet in {file_path}.")
+    # Load workbook and sheet
+    wb = load_workbook(file_path)
+    ws = wb['sample']
+    
+    # Define styles for center alignment and borders
+    align = Alignment(horizontal='center', vertical='center')
+    border = Border(left=Side(style='thin'),
+                    right=Side(style='thin'),
+                    top=Side(style='thin'),
+                    bottom=Side(style='thin'))
+    
+    # Apply styles to all cells in the sheet
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.alignment = align
+            cell.border = border
+    
+    wb.save(file_path)
+    print(f"Updated data successfully written to 'sample' sheet in {file_path} with formatting applied.")
 
 #Process the first available Excel file in the current directory
 process_excel()
-
