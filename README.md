@@ -82,3 +82,54 @@ def process_excel():
 
 #Process the first available Excel file in the current directory
 process_excel()
+
+
+import pandas as pd
+
+#File paths (Update these with actual file paths)
+file_1 = "sample_data.xlsx"  # File containing sample data
+file_2 = "reviewer_data.xlsx"  # File containing reviewer names and sample sizes
+
+#Sheet names (if applicable)
+sheet_name_1 = "Sheet1"  # Sheet with sample data
+sheet_name_2 = "Sheet1"  # Sheet with reviewer data
+
+#Load data
+df_samples = pd.read_excel(file_1, sheet_name=sheet_name_1)  # Load sample data
+df_reviewers = pd.read_excel(file_2, sheet_name=sheet_name_2)  # Load reviewer data
+
+#Ensure the reviewer file has 'Reviewer' and 'Sample Size' columns
+if 'Reviewer' not in df_reviewers.columns or 'Sample Size' not in df_reviewers.columns:
+    raise ValueError("The reviewer file must have 'Reviewer' and 'Sample Size' columns.")
+
+#Create a list to store assigned data
+assigned_samples = []
+
+# Initialize index for sample distribution
+sample_index = 0  
+
+#Loop through each reviewer and assign samples
+for _, row in df_reviewers.iterrows():
+    reviewer = row['Reviewer']
+    sample_size = row['Sample Size']
+    
+    # Get the samples for this reviewer
+    assigned = df_samples.iloc[sample_index:sample_index + sample_size].copy()
+    
+    # Assign reviewer name to the samples
+    assigned['Reviewer'] = reviewer
+    
+    # Add to final list
+    assigned_samples.append(assigned)
+    
+    # Update the sample index
+    sample_index += sample_size
+
+#Concatenate all assigned samples
+df_final = pd.concat(assigned_samples, ignore_index=True)
+
+#Save to a new Excel file
+output_file = "assigned_samples.xlsx"
+df_final.to_excel(output_file, index=False)
+
+print(f"Sample distribution completed! Check the file: {output_file}")
