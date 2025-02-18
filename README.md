@@ -18,34 +18,23 @@ being able to predict it can help banks take proactive steps to retain customers
 **Once the model has been trained and evaluated, it can be used to predict whether a new customer is likely to churn or not. This information can be used by the bank to take appropriate measures such as offering special promotions or incentives to retain customers who are at risk of churning.
 Overall, the goal of this project is to develop a machine learning model that can help banks to identify customers who are likely to churn and take appropriate measures to retain them.**
 
-import pandas as pd
+# Select only the required columns from the extracted data
+columns_to_keep = ["Reviewer", "Serial Number", "Amount", "HardHID", "Added Date"]
 
-# File paths (update these with your actual file names)
-calculator_file = "calculator.xlsx"  # File 1
-sample_data_file = "sample_data.xlsx"  # File 2
+# New columns to add
+new_columns = ["Column", "Assigned", "Assigned Date", "Reviewed", "Reviewed Date", "Due Date"]
 
-# Read the sample size from File 1
-calculator_df = pd.read_excel(calculator_file, sheet_name=0, header=None)  # Read without headers
-sample_size = int(calculator_df.iloc[23, 2])  # C24 is in row index 23, column index 2
+# Ensure the selected columns exist in the data
+filtered_columns = [col for col in columns_to_keep if col in final_df.columns]
 
-# Read agent names from D20-D25 (if needed)
-agent_names = calculator_df.iloc[19:25, 3].dropna().tolist()  # Row 19-25, Column D (index 3)
+# Create a new DataFrame with selected columns
+final_df_selected = final_df[filtered_columns].copy()
 
-# Read the "Sample" sheet from File 2
-sample_df = pd.read_excel(sample_data_file, sheet_name="Sample")
+# Add new columns with empty values
+for col in new_columns:
+    final_df_selected[col] = ""
 
-# Extract only the required columns
-selected_columns = ["Account Number", "Case Number"]
-if all(col in sample_df.columns for col in selected_columns):
-    filtered_df = sample_df[selected_columns]
-else:
-    raise ValueError("Required columns not found in the 'Sample' sheet.")
+# Save the modified data to a new file
+final_df_selected.to_excel("Final_Selected_Data.xlsx", index=False)
 
-# Select only the required number of rows based on sample size
-final_sample = filtered_df.head(sample_size)  # Change to `.sample(n=sample_size)` for random selection
-
-# Save the extracted data into a new file
-output_file = "extracted_sample.xlsx"
-final_sample.to_excel(output_file, index=False)
-
-print(f"Extracted {sample_size} rows and saved to {output_file}.")
+print("Filtered data saved successfully!")
