@@ -18,23 +18,52 @@ being able to predict it can help banks take proactive steps to retain customers
 **Once the model has been trained and evaluated, it can be used to predict whether a new customer is likely to churn or not. This information can be used by the bank to take appropriate measures such as offering special promotions or incentives to retain customers who are at risk of churning.
 Overall, the goal of this project is to develop a machine learning model that can help banks to identify customers who are likely to churn and take appropriate measures to retain them.**
 
-# Select only the required columns from the extracted data
-columns_to_keep = ["Reviewer", "Serial Number", "Amount", "HardHID", "Added Date"]
 
-# New columns to add
-new_columns = ["Column", "Assigned", "Assigned Date", "Reviewed", "Reviewed Date", "Due Date"]
 
-# Ensure the selected columns exist in the data
-filtered_columns = [col for col in columns_to_keep if col in final_df.columns]
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment, Border, Side
 
-# Create a new DataFrame with selected columns
-final_df_selected = final_df[filtered_columns].copy()
+# Load the Excel file
+file_path = "your_file.xlsx"  # Update with your file path
+wb = load_workbook(file_path)
 
-# Add new columns with empty values
-for col in new_columns:
-    final_df_selected[col] = ""
+# List of sheets to format
+sheets = ["raw data", "data with randomizer", "cases for review"]
 
-# Save the modified data to a new file
-final_df_selected.to_excel("Final_Selected_Data.xlsx", index=False)
+# Define border style
+thin_border = Border(left=Side(style='thin'), 
+                     right=Side(style='thin'), 
+                     top=Side(style='thin'), 
+                     bottom=Side(style='thin'))
 
-print("Filtered data saved successfully!")
+# Format each sheet
+for sheet_name in sheets:
+    ws = wb[sheet_name]
+    
+    # Loop through all cells and apply formatting
+    for row in ws.iter_rows():
+        for cell in row:
+            # Center align text
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+            # Apply border
+            cell.border = thin_border
+
+    # Auto-fit columns
+    for col in ws.columns:
+        max_length = 0
+        col_letter = col[0].column_letter  # Get column letter (A, B, C, etc.)
+        
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        adjusted_width = max_length + 2  # Adding padding
+        ws.column_dimensions[col_letter].width = adjusted_width
+
+# Save the formatted file
+wb.save("formatted_file.xlsx")
+print("Formatting applied successfully!")
