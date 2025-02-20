@@ -20,50 +20,27 @@ Overall, the goal of this project is to develop a machine learning model that ca
 
 
 
-import pandas as pd
-from openpyxl import load_workbook
-from openpyxl.styles import Alignment, Border, Side
+from datetime import date, timedelta import pandas as pd
 
-# Load the Excel file
-file_path = "your_file.xlsx"  # Update with your file path
-wb = load_workbook(file_path)
+def get_previous_quarter_workdays(): today = date.today() current_quarter = (today.month - 1) // 3 + 1
 
-# List of sheets to format
-sheets = ["raw data", "data with randomizer", "cases for review"]
+if current_quarter == 1:
+    start_date = date(today.year - 1, 10, 1)
+    end_date = date(today.year - 1, 12, 31)
+elif current_quarter == 2:
+    start_date = date(today.year, 1, 1)
+    end_date = date(today.year, 3, 31)
+elif current_quarter == 3:
+    start_date = date(today.year, 4, 1)
+    end_date = date(today.year, 6, 30)
+else:
+    start_date = date(today.year, 7, 1)
+    end_date = date(today.year, 9, 30)
 
-# Define border style
-thin_border = Border(left=Side(style='thin'), 
-                     right=Side(style='thin'), 
-                     top=Side(style='thin'), 
-                     bottom=Side(style='thin'))
+# Generate date range
+all_days = pd.date_range(start=start_date, end=end_date, freq='B')  # 'B' for business days
+return all_days
 
-# Format each sheet
-for sheet_name in sheets:
-    ws = wb[sheet_name]
-    
-    # Loop through all cells and apply formatting
-    for row in ws.iter_rows():
-        for cell in row:
-            # Center align text
-            cell.alignment = Alignment(horizontal="center", vertical="center")
-            # Apply border
-            cell.border = thin_border
+Example usage
 
-    # Auto-fit columns
-    for col in ws.columns:
-        max_length = 0
-        col_letter = col[0].column_letter  # Get column letter (A, B, C, etc.)
-        
-        for cell in col:
-            try:
-                if cell.value:
-                    max_length = max(max_length, len(str(cell.value)))
-            except:
-                pass
-        
-        adjusted_width = max_length + 2  # Adding padding
-        ws.column_dimensions[col_letter].width = adjusted_width
-
-# Save the formatted file
-wb.save("formatted_file.xlsx")
-print("Formatting applied successfully!")
+previous_quarter_workdays = get_previous_quarter_workdays() print(previous_quarter_workdays)
