@@ -18,88 +18,71 @@ being able to predict it can help banks take proactive steps to retain customers
 **Once the model has been trained and evaluated, it can be used to predict whether a new customer is likely to churn or not. This information can be used by the bank to take appropriate measures such as offering special promotions or incentives to retain customers who are at risk of churning.
 Overall, the goal of this project is to develop a machine learning model that can help banks to identify customers who are likely to churn and take appropriate measures to retain them.**
 
+1. Tell us about yourself.
+Answer:
+"I am a results-driven Data Analyst with expertise in data analytics, automation, and machine learning. I hold a postgraduate degree in Advanced Data Science and Machine Learning from NIIT, Bangalore, and a Bachelor's in Engineering from Graphic Era University, Dehradun.
 
-Here's a complete Python script that:
+Currently, I work as an Associate Analytics Consultant at Wells Fargo, where I develop automated reporting solutions using Python, create interactive dashboards with Tableau and SQL, and build machine learning models for financial data analysis and risk management.
 
-1. Creates an Excel file with two sheets:
+My technical skills include Python, SQL, Tableau, Power BI, and machine learning techniques such as supervised and unsupervised learning, NLP, and predictive modeling. I am excited about the opportunity to contribute to EdgeVerve’s data-driven initiatives and leverage my analytical expertise to drive business insights."
 
-"Raw Data": Contains previous quarter dates and a random column of values.
+2. Why do you want to work at EdgeVerve?
+Answer:
+"I am excited about EdgeVerve’s commitment to digital transformation and data-driven solutions. With my experience in analytics, automation, and machine learning, I see a great opportunity to contribute to EdgeVerve’s projects by leveraging my skills in Python, SQL, and data visualization.
 
-"Case for Review": Contains assigned dates (current date) and reviewed dates (randomized).
+I am particularly drawn to the company’s focus on innovation and technology in the energy sector. Working at EdgeVerve will allow me to apply my expertise in building analytical solutions that enhance decision-making and operational efficiency. Additionally, I am eager to work in a collaborative environment that encourages learning and growth."
 
+3. Why did you choose a career in data analysis?
+Answer:
+"I have always been fascinated by the power of data in uncovering insights and solving real-world problems. During my education and professional experience, I developed a strong interest in transforming raw data into meaningful business insights.
 
+My experience at Wells Fargo reinforced my passion for analytics, as I worked on automating reports, building dashboards, and applying machine learning to detect financial anomalies. I enjoy solving complex problems through data-driven decision-making, and data analysis allows me to continuously learn and grow in a dynamic field."
 
-2. Uses pandas and openpyxl to handle Excel operations.
+4. How do you prioritize tasks when working with multiple deadlines?
+Answer:
+"I prioritize tasks based on their urgency and impact. First, I assess all tasks and break them into smaller, manageable steps. I use tools like Trello and Jira to track progress and ensure deadlines are met efficiently.
 
+I also focus on automation wherever possible, which has helped me reduce manual effort in reporting tasks. Communication is key, so I proactively align expectations with my team and stakeholders to ensure smooth project execution."
 
+5. Describe a challenging project you've worked on and how you handled it.
+Answer:
+"One challenging project I worked on involved analyzing financial data for anomaly detection at Wells Fargo. The dataset was large, complex, and had inconsistencies, making it difficult to extract meaningful insights.
 
+I tackled this challenge by first performing thorough data cleaning using Python and SQL. I then applied machine learning techniques, including anomaly detection models, to identify potential fraud patterns. Additionally, I built interactive dashboards in Tableau to present findings in a clear and actionable manner.
 
----
+This project improved risk management strategies and enhanced audit processes, demonstrating the impact of data analytics in financial decision-making."
 
-Complete Code:
+6. How do you ensure the accuracy of your data analysis?
+Answer:
+"I follow a structured approach to ensure accuracy in my data analysis. First, I perform thorough data cleaning and validation to eliminate errors, inconsistencies, and missing values.
 
-import pandas as pd
-import numpy as np
-from datetime import date, timedelta
+I cross-check results using multiple data sources and apply statistical techniques like hypothesis testing and correlation analysis to verify insights. I also document my assumptions and methodologies to maintain transparency. Finally, I seek feedback from team members and stakeholders to validate the accuracy and relevance of the analysis."
 
-def get_previous_quarter_workdays(exclude_dates=None):
-    """Fetches all business days (Mon-Fri) from the previous quarter."""
-    today = date.today()
-    current_quarter = (today.month - 1) // 3 + 1
-    
-    if current_quarter == 1:
-        start_date = date(today.year - 1, 10, 1)
-        end_date = date(today.year - 1, 12, 31)
-    elif current_quarter == 2:
-        start_date = date(today.year, 1, 1)
-        end_date = date(today.year, 3, 31)
-    elif current_quarter == 3:
-        start_date = date(today.year, 4, 1)
-        end_date = date(today.year, 6, 30)
-    else:
-        start_date = date(today.year, 7, 1)
-        end_date = date(today.year, 9, 30)
+7. How do you handle pressure or tight deadlines in your work?
+Answer:
+"I handle pressure by staying organized and breaking tasks into manageable steps. I use automation techniques to streamline repetitive tasks, which helps save time and improve efficiency.
 
-    # Generate all business days (Monday to Friday)
-    all_days = pd.date_range(start=start_date, end=end_date, freq='B')
+When facing tight deadlines, I prioritize tasks based on their impact and ensure clear communication with my team to avoid bottlenecks. I also maintain a calm mindset and focus on delivering high-quality work within the given timeframe."
 
-    # Remove excluded dates if provided
-    if exclude_dates:
-        exclude_dates = pd.to_datetime(exclude_dates)
-        all_days = all_days[~all_days.isin(exclude_dates)]  
+8. What tools and technologies are you most comfortable working with in data analysis?
+Answer:
+"I am proficient in Python, SQL, and Excel VBA for data manipulation and automation. In addition, I have experience with data visualization tools like Tableau, Power BI, and Plotly.
 
-    return all_days
+For machine learning and statistical analysis, I work with libraries such as Scikit-learn, NumPy, Pandas, and NLP techniques. I am also familiar with databases like MySQL and PostgreSQL, and I actively explore cloud technologies like Google Cloud for data processing."
 
-# Step 1: Generate previous quarter workdays
-excluded_holidays = ['2024-12-25', '2024-11-28']  # Example holidays
-previous_quarter_dates = get_previous_quarter_workdays(exclude_dates=excluded_holidays)
+9. How do you approach learning new skills or tools in data analysis?
+Answer:
+"I believe in continuous learning and stay updated through online courses, industry blogs, and communities like GitHub and Stack Overflow.
 
-# Step 2: Create "Raw Data" sheet with random values
-raw_data_df = pd.DataFrame({
-    "Previous Quarter Dates": previous_quarter_dates,
-    "RANDOM": np.random.randint(100, 500, size=len(previous_quarter_dates))  # Random values
-})
+Whenever I learn a new tool, I apply it to real-world projects to gain hands-on experience. I also actively participate in workshops, hackathons, and online discussions to deepen my understanding and stay ahead of industry trends."
 
-# Step 3: Create "Case for Review" sheet
-current_date = pd.to_datetime(date.today())  # Today's date
-review_dates = previous_quarter_dates + pd.to_timedelta(np.random.randint(1, 10, size=len(previous_quarter_dates)), unit='D')
+10. Do you have any questions for us?
+Answer:
+"Yes, I have a few questions:
 
-case_for_review_df = pd.DataFrame({
-    "Date of Reviews Assigned": previous_quarter_dates,
-    "Assigned Date": current_date,
-    "Reviewed": np.random.choice([True, False], size=len(previous_quarter_dates)),  # Randomly assign True/False
-    "Reviewed Date": review_dates
-})
-
-# Step 4: Write to Excel
-excel_filename = "Previous_Quarter_Analysis.xlsx"
-with pd.ExcelWriter(excel_filename, engine='openpyxl') as writer:
-    raw_data_df.to_excel(writer, sheet_name="Raw Data", index=False)
-    case_for_review_df.to_excel(writer, sheet_name="Case for Review", index=False)
-
-print(f"Excel file '{excel_filename}' has been created successfully!")
-
-
----
+Can you tell me more about the team I would be working with and how they collaborate on data-driven projects?
+What are the growth opportunities at EdgeVerve, especially for someone in a data analysis role?
+How does EdgeVerve measure the success and impact of its data-driven initiatives in the energy sector?
+I am eager to understand how I can contribute effectively to the company’s goals and grow within the organization."
 
  
