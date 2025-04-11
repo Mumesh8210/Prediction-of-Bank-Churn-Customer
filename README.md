@@ -86,3 +86,23 @@ How does EdgeVerve measure the success and impact of its data-driven initiatives
 I am eager to understand how I can contribute effectively to the company’s goals and grow within the organization."
 
  
+Absolutely! Here's a clear and professional email you can send to Henry based on the details you shared:
+
+
+---
+
+Subject: Request for Guidance on DSO Critical Transaction Reporti
+Hi Henry,
+
+I hope you're doing well.
+
+I wanted to reach out to request your guidance on an issue we’re experiencing with the DSO Critical Transaction application.
+
+We use this application to pull daily volume data. However, we noticed that from March 25th to April 8th, no data was available. After raising an INC ticket, we were informed that the department name was changed from RCO PEMS to IES Auto Assign on March 25th, and then reverted back to RCO PEMS on April 8th. Since the update on April 8th, we are again able to access current data, but data for the affected dates (March 25th–April 8th) is still missing.
+
+When we followed up with the LOB, we were informed that this is not under ADS control. As per Kelsey, DSO Critical Transaction reporting has moved to Technology with Embedded IT, and it’s now owned by the Indigo PEMS/DMM partner team.
+
+Could you please help confirm who currently supports or owns this report, or guide me to the appropriate contact who can assist further?
+
+Thank you in advance for your help!
+
